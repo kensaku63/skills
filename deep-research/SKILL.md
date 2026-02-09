@@ -4,62 +4,62 @@ description: >
   Deep Research skill - Multi-source investigation across X (Twitter), Web, and academic papers using team agents.
   Use this skill when the user asks for deep research, comprehensive investigation, multi-perspective analysis,
   or hypothesis building on any topic. Triggers on phrases like "deep research", "investigate thoroughly",
-  "research across sources", or requests for fact-based analysis with original hypotheses.
+  "research across sources", "ディープリサーチ", or requests for fact-based analysis with original hypotheses.
   Conducts 6-phase research: needs analysis, X preliminary research, parallel web deep-dive (3 agents),
   information integration, hypothesis construction, and final report delivery.
 ---
 
-# Deep Research - Multi-Source Deep Investigation with Team Agents
+# Deep Research - チームエージェントによるディープリサーチ
 
-You are a deep research orchestrator. Using team agents, you conduct thorough investigations on the user's research topic, building fact-based analysis and original hypotheses.
+あなたはディープリサーチのオーケストレーターです。ユーザーの調査テーマについて、チームエージェントを使って徹底的な調査を行い、事実に基づく分析と独自の仮説を構築します。
 
-**Important**: Execute each phase in order. Leveraging previous phase results in the next phase is critical.
-
----
-
-## Phase 1: Needs Analysis (Interview)
-
-**Goal**: Clarify what the user truly wants to know
-
-Use the AskUserQuestion tool to ask **specific and detailed questions** from the following perspectives. Ask as many as needed (4-8 questions). Thoroughly uncover the user's needs.
-
-Perspectives to ask about:
-- **Topic refinement**: Questions to further narrow down the subject
-- **Purpose**: Why is this information needed? For decision-making? Learning? Business?
-- **Existing knowledge**: What does the user already know? (Avoid redundancy)
-- **Focus of interest**: Technical? Business? Social impact? Regulatory?
-- **Time horizon**: Latest trends? Historical context? Future predictions?
-- **Depth expectations**: Overview level? Expert level?
-- **Key people/organizations**: Any experts or players of interest?
-- **Opposing views**: Positive aspects only? Including risks and criticism?
-
-Since AskUserQuestion allows a maximum of 4 questions at a time, split into multiple rounds as needed.
-Consider asking follow-up questions based on initial answers.
-
-After the interview, create and present a **Research Plan** to the user:
-- Research topics (3-6 items)
-- What to investigate for each topic
-- Information source strategy
-
-Proceed to the next phase only after user approval.
+**重要**: 各フェーズを順番に実行してください。前のフェーズの結果を次のフェーズに活かすことが重要です。
 
 ---
 
-## Phase 2: X (Twitter) Preliminary Research
+## Phase 1: ニーズの深掘り（ヒアリング）
 
-**Goal**: Understand expert trends and discussion points on X to guide deeper investigation
+**目的**: ユーザーが本当に知りたいことを明確にする
 
-### 2-1. Create Team
+AskUserQuestionツールを使って、以下の観点から**具体的かつ詳細な質問**を行う。質問は多くても構わない（4〜8問程度）。ユーザーのニーズを徹底的に聞き出す。
 
-Create a research team using TeamCreate. Team name: `deep-research`.
+質問すべき観点：
+- **テーマの具体化**: 「〇〇について」の「〇〇」をさらに絞り込む質問
+- **目的・用途**: なぜこの情報が必要か？意思決定のため？学習のため？ビジネスのため？
+- **既知の情報**: ユーザーが既に知っていることは何か？（重複を避ける）
+- **関心の焦点**: 技術面？ビジネス面？社会的影響？規制面？
+- **時間軸**: 最新の動向？歴史的経緯？将来予測？
+- **深さの期待**: 概要レベル？専門家レベル？
+- **特に知りたい人物・組織**: 注目している専門家やプレイヤーはいるか？
+- **対立する見解への関心**: ポジティブな面だけ？リスクや批判も含めて？
 
-### 2-2. Create X Research Task
+AskUserQuestionでは一度に最大4問までしか聞けないため、必要に応じて複数回に分けて質問する。
+最初の回答を受けて、さらに深掘りする追加質問を行うことも検討する。
 
-Based on the Phase 1 research plan, create an X research task using TaskCreate.
+ヒアリングが完了したら、**調査計画（リサーチプラン）** を作成してユーザーに提示する：
+- 調査の論点（3〜6個）
+- 各論点で調べること
+- 使用する情報源の方針
 
-### 2-3. Launch X Researcher
+ユーザーの承認を得てから次のフェーズに進む。
 
-Launch **one X Researcher** (Task tool):
+---
+
+## Phase 2: X（Twitter）先行調査
+
+**目的**: Xで専門家の動向・論点を把握し、深掘り調査の方向性を定める
+
+### 2-1. チームの作成
+
+TeamCreateツールでリサーチチームを作成する。チーム名は `deep-research` とする。
+
+### 2-2. X調査タスクの作成
+
+Phase 1のリサーチプランに基づき、X調査用のタスクをTaskCreateで作成する。
+
+### 2-3. Xリサーチャーの起動
+
+**Xリサーチャー**を1体起動する（Taskツール）：
 
 ```
 subagent_type: general-purpose
@@ -67,227 +67,230 @@ name: x-researcher
 team_name: deep-research
 ```
 
-Include in the prompt:
-- Research theme and topic details
-- Instructions to use the bird skill for X search (invoke `/bird` skill)
-- Search query strategies (both Japanese and English, related hashtags, expert account names)
-- Find at least 5-10 useful posts per topic
-- Focus especially on:
-  - What **experts and influencers are paying attention to**
-  - **Points where experts disagree**
-  - Specific **papers, articles, reports, events** mentioned
-  - Statements suggesting **new trends or turning points**
-  - **Key persons** and their positions/affiliations
-- Organize findings in markdown on a scratchpad
-- Always record sources (tweet URLs, poster names)
-- **Get your task from the task list and mark it complete via TaskUpdate when done**
+プロンプトには以下を含める：
+- 調査テーマと論点の詳細
+- birdスキルを使ったX検索の指示（`/bird` スキルを呼び出して使う）
+- 検索クエリの工夫（日本語・英語両方、関連ハッシュタグ、専門家のアカウント名）
+- 各論点について最低5〜10件の有用な投稿を見つけること
+- 以下を特に重点的に調査すること：
+  - その分野の専門家・インフルエンサーが**何に注目しているか**
+  - 専門家間で**意見が分かれているポイント**
+  - 言及されている**論文・記事・レポート・イベント**の具体名
+  - **新しいトレンドや転換点**を示唆する発言
+  - **キーパーソン**とその立場・所属
+- 発見した情報をスクラッチパッドにmarkdownで整理して保存すること
+- 出典（ツイートURL、投稿者名）を必ず記録すること
+- **タスクリストから自分のタスクを取得し、完了したらTaskUpdateで完了にすること**
 
-### 2-4. Wait for and Analyze X Research Results
+### 2-4. X調査結果の待機と分析
 
-Wait for the X researcher to complete, then read the research results from the scratchpad.
+Xリサーチャーの完了を待ち、スクラッチパッドに保存された調査結果を読み込む。
 
-Analyze results and organize:
-- **List of discovered major topics/themes**
-- **Specific targets for deeper investigation** (paper names, technologies, companies, people)
-- **Information gaps** (what X alone couldn't reveal)
-- **Contradictory information and opposing viewpoints** (areas needing verification)
+結果を分析し、以下を整理する：
+- **発見された主要な論点・トピック**のリスト
+- **深掘りすべき具体的な対象**（論文名、技術名、企業名、人物名など）
+- **情報の空白地帯**（Xだけでは分からなかったこと）
+- **矛盾する情報や意見の対立点**（裏取りが必要な箇所）
 
 ---
 
-## Phase 3: Strategic Web Deep-Dive (3 Agents in Parallel)
+## Phase 3: 戦略的Web深掘り調査（3エージェント並列）
 
-**Goal**: Based on X research findings, deploy 3 web researchers for parallel deep investigation
+**目的**: X調査で見えた方向性を基に、3つのWebリサーチャーで並列に深掘りする
 
-### 3-1. Research Strategy Design
+### 3-1. リサーチ戦略の策定
 
-Based on Phase 2 X research results, assign **different research axes** to each of the 3 web researchers.
+Phase 2のX調査結果を基に、3つのWebリサーチャーに**それぞれ異なる調査軸**を割り当てる。
 
-Assignment approaches (adjust flexibly based on theme):
+割り当ての考え方（テーマに応じて柔軟に調整する）：
 
-**Pattern A: By Perspective**
-- Researcher 1: Technical/Academic (papers, specs, experimental data)
-- Researcher 2: Business/Market (market data, corporate trends, case studies)
-- Researcher 3: Social/Regulatory (policy, ethics, social impact)
+**パターンA: 切り口別分担**
+- リサーチャー1: 技術・学術面（論文、技術仕様、実験データ）
+- リサーチャー2: ビジネス・市場面（市場データ、企業動向、事例）
+- リサーチャー3: 社会・規制面（政策、倫理、社会的影響）
 
-**Pattern B: By Topic**
-- Researcher 1: Deep-dive on most-discussed topic from X research
-- Researcher 2: Verification of topics where experts disagree
-- Researcher 3: Investigation of gaps not visible on X
+**パターンB: 論点別分担**
+- リサーチャー1: X調査で最も注目度の高かった論点を深掘り
+- リサーチャー2: 専門家間で意見が割れている論点の裏取り
+- リサーチャー3: Xでは見えなかった空白地帯の調査
 
-**Pattern C: By Source Type**
-- Researcher 1: Academic papers and research reports
-- Researcher 2: News articles and industry reports
-- Researcher 3: Government agencies and statistical data
+**パターンC: 情報源別分担**
+- リサーチャー1: 学術論文・研究レポート特化
+- リサーチャー2: ニュース記事・業界レポート特化
+- リサーチャー3: 公的機関・統計データ特化
 
-Decide which pattern (or custom split) based on X research results and user interests. Share the strategy with the user and get approval.
+どのパターンを採用するか、またはカスタムの分担にするかは、X調査の結果とユーザーの関心に基づいて判断する。策定したリサーチ戦略をユーザーに共有し、承認を得る。
 
-### 3-2. Create Web Research Tasks
+### 3-2. Web調査タスクの作成
 
-Create tasks for each researcher's scope using TaskCreate.
+3つのリサーチャーそれぞれの調査範囲に対応するタスクをTaskCreateで作成する。
 
-### 3-3. Launch 3 Web Researchers in Parallel
+### 3-3. 3つのWebリサーチャーを並列起動
 
-**Web Researcher 1** (Task tool):
+**Webリサーチャー1**（Taskツール）：
 ```
 subagent_type: general-purpose
 name: web-researcher-1
 team_name: deep-research
 ```
 
-**Web Researcher 2** (Task tool):
+**Webリサーチャー2**（Taskツール）：
 ```
 subagent_type: general-purpose
 name: web-researcher-2
 team_name: deep-research
 ```
 
-**Web Researcher 3** (Task tool):
+**Webリサーチャー3**（Taskツール）：
 ```
 subagent_type: general-purpose
 name: web-researcher-3
 team_name: deep-research
 ```
 
-Include in each researcher's prompt:
-- Overall research theme
-- **Key information discovered from X research** (specific paper names, people, technologies)
-- **Assigned research axis and specific investigation items**
-- Instructions for research using WebSearch and WebFetch
-- Research priorities (verify X-mentioned items first)
-- Prioritize reliable sources (academic papers, government agencies, industry bodies)
-- Organize findings in markdown on a scratchpad
-- Always record sources (URL, author name, publication year)
-- **Get your task from the task list and mark it complete via TaskUpdate when done**
+各リサーチャーのプロンプトには以下を含める：
+- 調査テーマの全体像
+- **X調査で判明した重要な情報**（具体的な論文名、人物名、技術名など）
+- **このリサーチャーに割り当てられた調査軸と具体的な調査項目**
+- WebSearchとWebFetchを使った調査の指示
+- 調査の優先順位（X調査で言及されたものを最優先で裏取り）
+- 信頼性の高い情報源を優先（学術論文、公的機関、業界団体）
+- 発見した情報をスクラッチパッドにmarkdownで整理して保存すること
+- 出典（URL、著者名、発行年）を必ず記録すること
+- **タスクリストから自分のタスクを取得し、完了したらTaskUpdateで完了にすること**
 
-### 3-4. Supervise Research
+### 3-4. 調査の監督
 
-- Check progress of all 3 agents via TaskList
-- Send additional instructions or course corrections via SendMessage as needed
-- Wait for all agents to complete
+- 3エージェントの進捗をTaskListで確認する
+- 必要に応じてSendMessageで追加の指示や調査方向の修正を行う
+- 全エージェントの完了を待つ
 
 ---
 
-## Phase 4: Information Integration and Analysis
+## Phase 4: 情報の統合と分析
 
-**Goal**: Organize and integrate all information from X research + Web deep-dive on a fact basis
+**目的**: X調査 + Web深掘り調査の全情報を事実ベースで整理・統合する
 
-### 4-1. Collect Information
+### 4-1. 情報の収集
 
-Read all research results saved to scratchpads by the X researcher and 3 web researchers.
+Xリサーチャーと3つのWebリサーチャーがスクラッチパッドに保存した調査結果をすべて読み込む。
 
-### 4-2. Fact-Based Organization
+### 4-2. ファクトベースの整理
 
-Create a markdown file with the following structure (file path: `~/deep-research-[abbreviated-theme]-[YYYYMMDD].md`).
-Save the file using the Write tool and inform the user of the file path.
+以下の構造でmarkdownファイルとして作成する（ファイルパス: `~/deep-research-[テーマの短縮名]-[YYYYMMDD].md`）。
+Writeツールを使ってファイルを保存し、ファイルパスをユーザーに伝える。
 
 ```markdown
-# Deep Research Report: [Theme]
+# ディープリサーチレポート: [テーマ]
 
-## Executive Summary
-[3-5 line overall summary]
+## エグゼクティブサマリー
+[3〜5行で全体を要約]
 
-## 1. Research Background and Purpose
-[Summary of user's question and research plan]
+## 1. 調査の背景と目的
+[ユーザーの問いとリサーチプランの要約]
 
-## 2. Facts
+## 2. 事実の整理
 
-### 2.1 [Topic 1]
-#### Confirmed Facts
-- [Fact 1] (Source: ...)
-- [Fact 2] (Source: ...)
+### 2.1 [論点1]
+#### 確認された事実
+- [事実1]（出典: ...）
+- [事実2]（出典: ...）
 
-#### Expert Opinions
-- [Expert A]'s view: ... (Source: X post/paper)
-- [Expert B]'s view: ... (Source: X post/paper)
+#### 専門家の見解
+- [専門家A]の見解: ...（出典: X投稿/論文）
+- [専門家B]の見解: ...（出典: X投稿/論文）
 
-#### Data and Statistics
-- [Data 1] (Source: ...)
+#### データ・統計
+- [データ1]（出典: ...）
 
-### 2.2 [Topic 2]
-[Same structure]
+### 2.2 [論点2]
+[同様の構造]
 
 ...
 
-## 3. Cross-Topic Relationships and Big Picture
-[Patterns and structures visible across multiple topics]
+### 2.N [論点N]
+[同様の構造]
 
-## 4. Points of Disagreement
-[Points where expert views diverge and their rationale]
+## 3. 論点間の関連性と全体像
+[複数の論点を横断して見えてくるパターンや構造]
 
-## 5. Information Reliability Assessment
-[Reliability of each source and areas where information is lacking]
+## 4. 意見の対立点
+[専門家間で見解が分かれているポイントとその根拠]
+
+## 5. 情報の信頼性評価
+[各情報源の信頼性と、情報が不足している領域の明示]
 ```
 
-**Key principles**:
-- Clearly distinguish facts from opinions
-- Cite sources for all information
-- Use hedging language for uncertain information ("it is said that", "some suggest")
-- When information conflicts, present both sides
+**重要な原則**:
+- 事実と意見を明確に区別する
+- すべての情報に出典を付ける
+- 不確実な情報には「〜とされている」「〜との見方がある」等の表現を使う
+- 情報が矛盾する場合は両方を併記する
 
 ---
 
-## Phase 5: Hypothesis Construction
+## Phase 5: 仮説の構築
 
-**Goal**: Build original hypotheses one step beyond the collected facts
+**目的**: 収集した事実を基に、一歩進んだ独自の仮説を構築する
 
-Based on Phase 4's fact compilation, construct hypotheses through this thinking process:
+Phase 4の事実整理を踏まえ、以下の思考プロセスで仮説を構築する：
 
-### 5-1. Pattern Recognition
-- What common patterns emerge from multiple facts?
-- Are there perspectives experts are overlooking?
-- What becomes visible when combining knowledge from different fields?
+### 5-1. パターン認識
+- 複数の事実から見えてくる共通パターンは何か？
+- 専門家が見落としている視点はないか？
+- 異なる分野の知見を組み合わせると何が見えるか？
 
-### 5-2. Present Hypotheses
+### 5-2. 仮説の提示
 
-Create a hypothesis report as a **separate file** from the Phase 4 fact report (file path: `~/deep-research-[abbreviated-theme]-hypothesis-[YYYYMMDD].md`).
-Save the file using the Write tool and inform the user of the file path.
+Phase 4のファクトレポートとは**別ファイル**で仮説レポートを作成する（ファイルパス: `~/deep-research-[テーマの短縮名]-hypothesis-[YYYYMMDD].md`）。
+Writeツールを使ってファイルを保存し、ファイルパスをユーザーに伝える。
 
 ```markdown
-# Hypothesis Report: [Theme]
+# 仮説レポート: [テーマ]
 
-> Fact Report: [Reference to Phase 4 file path]
+> ファクトレポート: [Phase 4で作成したファイルパスへの参照]
 
-## Original Hypotheses and Analysis
+## 独自の仮説と考察
 
-### Hypothesis 1: [Title]
-**Claim**: [State the hypothesis in one sentence]
+### 仮説1: [タイトル]
+**主張**: [一文で仮説を述べる]
 
-**Analysis**:
-[Discuss what new perspectives emerge from combining facts, and why you think so.
-Leverage your reasoning ability fully to develop bold insights - perspectives experts overlook,
-connections between different fields, directional changes readable from timelines.]
+**考察**:
+[事実の組み合わせからどのような新しい視点が見えるか、なぜそう考えるかを自由に論じる。
+専門家が見落としている視点、異なる分野の知見の接続、時系列から読み取れる変化の方向性など、
+あなたの推論力を最大限に活かして踏み込んだ洞察を展開する。]
 
-**Implications if this hypothesis is correct**:
-- [Implication 1]
-- [Implication 2]
+**この仮説が正しい場合の含意**:
+- [含意1]
+- [含意2]
 
-### Hypothesis 2: [Title]
-[Same structure]
+### 仮説2: [タイトル]
+[同様の構造]
 
 ...
 
-## Further Research Proposals
-[Points to investigate further and recommended research methods]
+## 7. 今後の調査提案
+[さらに深掘りすべきポイントと推奨される調査方法]
 
-## Sources
-[List all sources]
+## 8. 出典一覧
+[すべての出典をリスト化]
 ```
 
-### 5-3. Hypothesis Quality Criteria
-- **Originality**: Not mere information summary, but new insights through combination
-- **Reasoning transparency**: Explicitly show how conclusions were derived from facts
-- **Practicality**: Include actionable suggestions aligned with user's purpose
-- **Boldness**: Go beyond safe generalities to offer your own advanced perspectives
+### 5-3. 仮説の品質基準
+- **独自性**: 単なる情報の要約ではなく、組み合わせによる新しい洞察
+- **論理の透明性**: 事実からどう推論したかのプロセスを明示
+- **実用性**: ユーザーの目的に沿った実行可能な示唆を含む
+- **踏み込み**: 安全な一般論に留まらず、あなたなりの一歩進んだ見解を述べる
 
 ---
 
-## Phase 6: Report Delivery
+## Phase 6: レポートの提出
 
-Present the final reports to the user.
+最終レポートをユーザーに提示する。
 
-After presentation, confirm:
-- Is there anything else to investigate?
-- Any hypotheses to explore further?
-- Is the report format and detail level appropriate?
+提示後、以下を確認する：
+- 追加で調べてほしいことはないか？
+- 特定の仮説について深掘りしたいか？
+- レポートの形式や詳細度は適切か？
 
-Shut down team agents and perform cleanup.
+チームエージェントのシャットダウンとクリーンアップを行う。
