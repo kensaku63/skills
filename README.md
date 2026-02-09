@@ -1,24 +1,47 @@
-# Claude Skills by kensaku63
+# Skills by kensaku63
 
-Claude Code で使えるカスタムスキル集です。
+AI エージェント向けのカスタムスキル集です。Claude Code をはじめ、様々なエージェントで使えるスキルを公開しています。
 
-A collection of custom skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+A collection of custom skills for AI agents — Claude Code, Cursor, and beyond.
 
 ## Installation
 
-```bash
-npx skills add kensaku63/claude-skills
-```
-
-特定のスキルだけをインストールする場合：
+### Claude Code
 
 ```bash
-npx skills add kensaku63/claude-skills --skill deep-research
+npx skills add kensaku63/skills
 ```
+
+特定のスキルだけをインストール：
+
+```bash
+npx skills add kensaku63/skills --skill deep-research
+```
+
+### Other Agents
+
+各スキルの `SKILL.md` を対象エージェントの設定ディレクトリにコピーして使えます。詳細は各スキルの説明を参照してください。
+
+---
 
 ## Skills
 
-### deep-research
+### Claude Code
+
+| Skill | Description |
+|-------|-------------|
+| [deep-research](#deep-research) | X・Web・論文を横断した多角的ディープリサーチ |
+
+<!-- ### Cursor / Other Agents -->
+<!-- 今後追加予定 -->
+
+---
+
+## deep-research
+
+> **Agent**: Claude Code
+>
+> **Category**: Research
 
 X (Twitter)・Web・論文を横断した多角的ディープリサーチスキル。
 
@@ -33,21 +56,20 @@ X (Twitter)・Web・論文を横断した多角的ディープリサーチスキ
 | 5. Hypothesis | 事実を基に独自の仮説を構築 |
 | 6. Delivery | レポート提出とフォローアップ |
 
-#### Output
+### Output
 
 2つのレポートファイルが生成されます：
 
-- `~/deep-research-[theme]-[YYYYMMDD].md` - ファクトレポート（事実の整理）
-- `~/deep-research-[theme]-hypothesis-[YYYYMMDD].md` - 仮説レポート（独自の考察）
+- `~/deep-research-[theme]-[YYYYMMDD].md` — ファクトレポート（事実の整理）
+- `~/deep-research-[theme]-hypothesis-[YYYYMMDD].md` — 仮説レポート（独自の考察）
 
-#### Prerequisites
+### Prerequisites
 
-> **Important**: このスキルは Phase 2 の X (Twitter) 調査で [bird](https://github.com/kensaku63/bird) スキルを使用します。
+> **Note**: このスキルは Phase 2 の X (Twitter) 調査で [bird](https://github.com/kensaku63/bird) スキルを使用します。
 >
-> bird スキルがインストールされていない場合、Phase 2 の X 調査はスキップされ、Phase 3 の Web 調査のみで実施されます。
-> フル機能を使うには、事前に bird スキルをセットアップしてください。
+> bird スキルがインストールされていない場合、Phase 2 はスキップされ、Phase 3 の Web 調査のみで実施されます。フル機能を使うには、事前に bird スキルをセットアップしてください。
 
-#### Usage
+### Usage
 
 Claude Code で以下のように呼び出します：
 
@@ -61,23 +83,26 @@ deep research on [your topic]
 
 Claude がヒアリングから始めて、自動的にチームエージェントを立ち上げて調査を進めます。
 
-## Adding New Skills
+---
 
-このリポジトリにスキルを追加するには：
+## Repository Structure
+
+```
+skills/
+├── README.md
+├── LICENSE
+├── deep-research/          # Claude Code skill
+│   └── SKILL.md
+├── your-new-skill/         # Add new skills here
+│   └── SKILL.md
+└── ...
+```
+
+スキルを追加するには：
 
 1. スキル名のディレクトリを作成
 2. `SKILL.md` を配置（YAML frontmatter + 本文）
 3. 必要に応じて `references/` や `scripts/` サブディレクトリを追加
-
-```
-claude-skills/
-├── README.md
-├── deep-research/
-│   └── SKILL.md
-├── your-new-skill/
-│   └── SKILL.md
-└── ...
-```
 
 ## License
 
