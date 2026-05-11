@@ -165,7 +165,7 @@ bird check     # 認証元の確認
 | `bird tweet "text"` | ツイートを投稿 |
 | `bird reply <url> "text"` | リプライ |
 
-全コマンドの詳細は `bird/SKILL.md` または [bird.fast](https://bird.fast/) を参照してください。
+全コマンドの詳細は `.claude/skills/bird/SKILL.md` または [bird.fast](https://bird.fast/) を参照してください。
 
 ### Troubleshooting
 
@@ -189,22 +189,32 @@ bird query-ids --fresh    # GraphQL クエリ ID のキャッシュを更新
 skills/
 ├── README.md
 ├── LICENSE
-├── deep-research/          # Deep research skill
-│   └── SKILL.md
-├── bird/                   # X (Twitter) CLI skill
-│   └── SKILL.md
-└── ...
+└── .claude/
+    └── skills/
+        ├── deep-research/    # Deep research skill
+        ├── bird/             # X (Twitter) CLI skill
+        ├── brainstorming/    # superpowers
+        ├── writing-skills/   # superpowers
+        ├── writing-plans/    # superpowers
+        ├── executing-plans/  # superpowers
+        ├── test-driven-development/
+        ├── systematic-debugging/
+        ├── ...               # その他 superpowers スキル
+        └── ...
 ```
+
+このリポジトリには [obra/superpowers](https://github.com/obra/superpowers) の汎用スキル群を取り込んでいます。
 
 スキルを追加するには：
 
-1. スキル名のディレクトリを作成
+1. `.claude/skills/<skill-name>/` ディレクトリを作成
 2. `SKILL.md` を配置（YAML frontmatter + 本文）
 3. 必要に応じて `references/` や `scripts/` サブディレクトリを追加
 
 ## Credits
 
 - **bird CLI** — Created by [Peter Steinberger](https://github.com/steipete) ([@steipete](https://x.com/steipete)). The bird skill in this repository is based on the [openclaw/openclaw](https://github.com/openclaw/openclaw) bird skill (MIT License) with modifications. The bird CLI tool itself (`@steipete/bird`) is a separate package — please visit [bird.fast](https://bird.fast/) for the official documentation.
+- **superpowers** — General-purpose agent skills sourced from [obra/superpowers](https://github.com/obra/superpowers) (MIT License).
 
 ## License
 
